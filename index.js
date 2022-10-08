@@ -7,6 +7,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors());
+app.use(express.urlencoded({extended: true}));
 
 app.use('/public', express.static(`${process.cwd()}/public`));
 
@@ -31,13 +32,13 @@ app.post('/api/shorturl', function(req, res) {
   if(foundIndex < 0) {
     originalUrls.push(url);
     shortUrls.push(shortUrls.length);
+    
+    return res.json({
+      original_url: url,
+      short_url: shortUrls.length - 1
+    });
   }
-
-  return res.json({
-    original_url: url,
-    short_url: shortUrls.length - 1
-  });
-
+    
   return res.json({
     original_url: url,
     short_url: shortUrls[foundIndex]
